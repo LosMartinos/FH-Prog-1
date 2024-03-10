@@ -79,7 +79,7 @@ public class HomeController implements Initializable {
             observableMovies.clear();
             // Filter by both genre and search
             for (Movie movie : allMovies) {
-                if (movie.getGenres().contains(genre) || (movie.getTitle().toLowerCase().contains(search) || movie.getDescription().toLowerCase().contains(search))) {
+                if (movie.getGenres().contains(genre) && (movie.getTitle().toLowerCase().contains(search) || movie.getDescription().toLowerCase().contains(search))) {
                     observableMovies.add(movie);
                 }
             }
