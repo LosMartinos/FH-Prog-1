@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -70,6 +71,7 @@ public class HomeController implements Initializable {
         observableMovies.clear();
         observableMovies.addAll(allMovies);
         movieListView.setItems(observableMovies);
+        genreComboBox.setValue(null);
     }
 
     public void filterObservableMovies(Movie.MOVIEGENRES genre, String search) {
@@ -113,10 +115,11 @@ public class HomeController implements Initializable {
     }
 
     public void sortMoviesAscending(){
-
+        Collections.sort(observableMovies);
     }
     public void sortMoviesDescending(){
-
+        sortMoviesAscending();
+        Collections.reverse(observableMovies);
     }
 
 }

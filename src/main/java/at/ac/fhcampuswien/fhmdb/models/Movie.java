@@ -3,12 +3,18 @@ package at.ac.fhcampuswien.fhmdb.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Movie {
+public class Movie implements Comparable {
     private String title;
     private String description;
 
     // TODO add more properties here
     private List<MOVIEGENRES> genres;
+
+    @Override
+    public int compareTo(Object o) {
+        return this.getTitle().compareTo(((Movie) o).getTitle());
+    }
+
     public enum MOVIEGENRES {
         ACTION, ADVENTURE, ANIMATION, BIOGRAPHY, COMEDY,
         CRIME, DRAMA, DOCUMENTARY, FAMILY, FANTASY, HISTORY, HORROR,
