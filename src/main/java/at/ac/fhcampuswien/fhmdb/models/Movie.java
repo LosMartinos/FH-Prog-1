@@ -36,9 +36,10 @@ public class Movie {
         List<Movie> movies = new ArrayList<>();
         // TODO add some dummy data here
         movies.add(new Movie("Ted", "This is a cool movie!", List.of(MOVIEGENRES.ACTION, MOVIEGENRES.COMEDY)));
-        movies.add(new Movie("Sharknado 5", "This is a hilarious movie!", List.of(MOVIEGENRES.ACTION, MOVIEGENRES.COMEDY)));
-        movies.add(new Movie("Balls", "Yeah, no idea what this is about...", List.of(MOVIEGENRES.FANTASY, MOVIEGENRES.HORROR)));
-
+        movies.add(new Movie("Balls", "Yeah, no idea what this is about... But it won an oscar", List.of(MOVIEGENRES.FANTASY, MOVIEGENRES.HORROR)));
+        movies.add(new Movie("The Lobster", "A dystopian comedy-drama where single people must find a romantic partner within 45 days or be turned into animals.", List.of(MOVIEGENRES.COMEDY)));
+        movies.add(new Movie("Arcane", "A visually stunning animated series set in the gritty city of Piltover and the oppressed underground of Zaun, where two sisters find themselves on opposite sides of a brewing conflict that threatens to tear their world apart.", List.of(MOVIEGENRES.ACTION, MOVIEGENRES.DRAMA, MOVIEGENRES.ANIMATION)));
+        movies.add(new Movie("Suits", "A legal drama series centered around a brilliant college dropout who lands a job as a law associate to a top Manhattan lawyer, despite lacking a law degree. With his photographic memory and quick wit, he navigates the cutthroat world of corporate law while hiding his secret.", List.of(MOVIEGENRES.DRAMA)));
         return movies;
     }
 

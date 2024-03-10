@@ -35,6 +35,7 @@ public class HomeController implements Initializable {
     public List<Movie> allMovies = Movie.initializeMovies();
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
+    public JFXButton resetBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -44,24 +45,78 @@ public class HomeController implements Initializable {
         movieListView.setItems(observableMovies);   // set data of observable list to list view
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
 
-        // TODO add genre filter items with genreComboBox.getItems().addAll(...)
         genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().addAll(EnumSet.allOf(Movie.MOVIEGENRES.class));
 
-        // TODO add event handlers to buttons and call the regarding methods
-        // either set event handlers in the fxml file (onAction) or add them here
+        resetBtn.setOnAction(event -> {
+            resetFilters();
+        });
 
-        // Sort button example:
+        searchBtn.setOnAction(event -> {
+            filterObservableMovies((Movie.MOVIEGENRES) genreComboBox.getValue(), searchField.getText().toLowerCase());
+            movieListView.setItems(observableMovies);
+        });
         sortBtn.setOnAction(actionEvent -> {
-            if(sortBtn.getText().equals("Sort (asc)")) {
-                // TODO sort observableMovies ascending
+            if (sortBtn.getText().equals("Sort (asc)")) {
+                sortMoviesAscending();
                 sortBtn.setText("Sort (desc)");
             } else {
-                // TODO sort observableMovies descending
+                sortMoviesDescending();
                 sortBtn.setText("Sort (asc)");
             }
         });
+    }
+    private void resetFilters() {
+        observableMovies.clear();
+        observableMovies.addAll(allMovies);
+        movieListView.setItems(observableMovies);
+    }
 
+    public void filterObservableMovies(Movie.MOVIEGENRES genre, String search) {
+        // Check if both genre and search are not empty
+        search = search.toLowerCase();
+        if (genre != null && !search.isEmpty()) {
+            observableMovies.clear();
+            // Filter by both genre and search
+            for (Movie movie : allMovies) {
+                if (movie.getGenres().contains(genre) || (movie.getTitle().toLowerCase().contains(search) || movie.getDescription().toLowerCase().contains(search))) {
+                    observableMovies.add(movie);
+                }
+            }
+            return;
+        }
+
+        // Check if genre is not empty
+        if (genre != null) {
+            observableMovies.clear();
+            // Filter only by genre
+            for (Movie movie : allMovies) {
+                if (movie.getGenres().contains(genre)) {
+                    observableMovies.add(movie);
+                }
+            }
+            return;
+        }
+
+        // Check if search is not empty
+        if (!search.isEmpty()) {
+            observableMovies.clear();
+            // Filter only by search
+            for (Movie movie : allMovies) {
+                if (movie.getTitle().toLowerCase().contains(search) || movie.getDescription().toLowerCase().contains(search)) {
+                    observableMovies.add(movie);
+                }
+            }
+        }
+
+        //No filtering required
+    }
+
+    public void sortMoviesAscending(){
 
     }
+    public void sortMoviesDescending(){
+
+    }
+
 }
