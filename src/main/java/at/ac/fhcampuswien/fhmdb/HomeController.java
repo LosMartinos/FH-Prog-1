@@ -59,10 +59,10 @@ public class HomeController implements Initializable {
         });
         sortBtn.setOnAction(actionEvent -> {
             if (sortBtn.getText().equals("Sort (asc)")) {
-                sortMoviesAscending();
+                sortMoviesAscending(observableMovies);
                 sortBtn.setText("Sort (desc)");
             } else {
-                sortMoviesDescending();
+                sortMoviesDescending(observableMovies);
                 sortBtn.setText("Sort (asc)");
             }
         });
@@ -114,12 +114,16 @@ public class HomeController implements Initializable {
         //No filtering required
     }
 
-    public void sortMoviesAscending(){
-        Collections.sort(observableMovies);
+    public void sortMoviesAscending(List<Movie> movies){
+        Collections.sort(movies);
     }
-    public void sortMoviesDescending(){
-        sortMoviesAscending();
-        Collections.reverse(observableMovies);
+    public void sortMoviesDescending(List<Movie> movies){
+        sortMoviesAscending(movies);
+        Collections.reverse(movies);
+    }
+
+    public void setObservableMovies(List<Movie> movies) {
+        observableMovies.addAll(movies);
     }
 
 }
