@@ -67,6 +67,11 @@ public class HomeController implements Initializable {
             }
         });
     }
+
+    public ObservableList<Movie> getObservableMovies() {
+        return observableMovies;
+    }
+
     private void resetFilters() {
         observableMovies.clear();
         observableMovies.addAll(allMovies);
