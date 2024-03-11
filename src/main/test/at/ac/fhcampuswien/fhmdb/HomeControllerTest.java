@@ -1,11 +1,8 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.models.Movie;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +26,6 @@ class HomeControllerTest {
 
     @Test
     void searchBarQuery(){
-        List<Movie> movies = Movie.initializeMovies();
         String movieTitle = "The Hateful Eight"; //Capital Letters
         HomeController homeController = new HomeController();
         assertAll("simple query assertion",
@@ -43,7 +39,6 @@ class HomeControllerTest {
 
     @Test
     void searchBarIgnoreCapitalization() {
-        List<Movie> movies = Movie.initializeMovies();
         String movieTitle1 = "THE HATEFUL EIGHT"; //Capital Letters
         String movieTitle2 = "tokyo zombie"; //Lowercase Letters
         HomeController homeController = new HomeController();
@@ -61,7 +56,6 @@ class HomeControllerTest {
 
     @Test
     void searchBarGenreFilter() {
-        List<Movie> movies = Movie.initializeMovies();
         Movie.MOVIEGENRES movieGenre1 = Movie.MOVIEGENRES.SPORT;
         Movie.MOVIEGENRES movieGenre2 = Movie.MOVIEGENRES.SCIENCE_FICTION;
         Movie.MOVIEGENRES movieGenre3 = Movie.MOVIEGENRES.ACTION;
@@ -88,7 +82,6 @@ class HomeControllerTest {
 
     @Test
     void searchBarGenreFilterAndMovieNameCombined() {
-        List<Movie> movies = Movie.initializeMovies();
         Movie.MOVIEGENRES movieGenre1 = Movie.MOVIEGENRES.SPORT;
         String movieName1 = "Rocky";
         Movie.MOVIEGENRES movieGenre2 = Movie.MOVIEGENRES.ACTION;
