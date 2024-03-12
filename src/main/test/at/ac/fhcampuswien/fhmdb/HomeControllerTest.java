@@ -31,9 +31,8 @@ class HomeControllerTest {
         assertAll("simple query assertion",
                 () -> {
                     homeController.filterObservableMovies(null,movieTitle);
-                    assertEquals(homeController.getObservableMovies().get(0).getTitle(),"The Hateful Eight", "Ignore Capitalization failed");
+                    assertEquals(homeController.getObservableMovies().get(0).getTitle(),"The Hateful Eight", "Search check failed");
                 }
-
         );
     }
 
