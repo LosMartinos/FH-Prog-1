@@ -47,14 +47,15 @@ public class HomeController implements Initializable {
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
 
         genreComboBox.setPromptText("Filter by Genre");
-        genreComboBox.getItems().addAll(EnumSet.allOf(Movie.MOVIEGENRES.class));
+        genreComboBox.getItems().addAll();
 
         resetBtn.setOnAction(event -> {
             resetFilters();
         });
 
         searchBtn.setOnAction(event -> {
-            filterObservableMovies((Movie.MOVIEGENRES) genreComboBox.getValue(), searchField.getText().toLowerCase());
+            // die untere Method gehört komplett neu gemaccht
+            //filterObservableMovies((Movie.MOVIEGENRES) genreComboBox.getValue(), searchField.getText().toLowerCase());
             movieListView.setItems(observableMovies);
         });
         sortBtn.setOnAction(actionEvent -> {
@@ -79,7 +80,7 @@ public class HomeController implements Initializable {
         genreComboBox.setValue(null);
     }
 
-    public void filterObservableMovies(Movie.MOVIEGENRES genre, String search) {
+    public void filterObservableMovies(List<String> genre, String search) {
         // Check if both genre and search are not empty
         search = search.toLowerCase();
         if (genre != null && !search.isEmpty()) {
