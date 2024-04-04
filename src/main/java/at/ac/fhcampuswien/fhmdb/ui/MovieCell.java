@@ -32,7 +32,7 @@ public class MovieCell extends ListCell<Movie> {
                             ? movie.getDescription()
                             : "No description available"
             );
-            String genresString = String.join(", ", movie.getGenres());
+            genres.setText(String.join(", ", movie.getGenres()));
 
             // color scheme
             title.getStyleClass().add("text-yellow");
