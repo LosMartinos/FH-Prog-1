@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class HomeController implements Initializable {
     @FXML
@@ -118,4 +119,36 @@ public class HomeController implements Initializable {
     public void sortBtnClicked(ActionEvent actionEvent) {
         sortMovies();
     }
+
+    public int getLongestMovieTitle(List<Movie> movies) {
+        return movies.stream() //umwandlung zu eeinem stream
+                .mapToInt(movie -> movie.getTitle().length()) // mapping zu int
+                .max() // nimm das max im stream, first found gewinnt im standoff
+                .orElse(0); // wenn fehler is gib 0
+    }
+
+    public int countMoviesFrom(List<Movie> movies, String director) { // normalerweise ein long weil im stream große zahlen sein können
+        return (int)movies.stream()
+                .filter(movie -> movie.getDirectors().contains(director)) // get directors
+                .count();
+    }
+
+    public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear) {
+        return movies.stream()
+                .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
+                .collect(Collectors.toList()); // Collectors.tolist macht eine liste aus den movies
+    }
+
+    //wtf man
+    public String getMostPopularActor(List<Movie> movies) {
+        Map<String, Long> actorCounts = movies.stream()  // chatgpt gönnt
+                .flatMap(movie -> movie.getMainCast().stream()) // flat map is map für listen/arrays/gruppen
+                .collect(Collectors.groupingBy(s -> s, Collectors.counting())); // lambda um den actorstring unverändert zu übergeben
+
+        return actorCounts.entrySet().stream() // ???xd
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(null);
+    }
 }
+
