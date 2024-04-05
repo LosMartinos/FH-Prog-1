@@ -18,10 +18,8 @@ public class Movie {
     public Movie() {}
 
 
-    public static List<Movie> initializeMovies() {
-        String url = MovieAPI.createUrlForMovieAPI("","","","");
-        String movieData = MovieAPI.okhttpGetRequestForMovieAPI(url);
-        return MovieAPI.jsonStringToMovieObjects(movieData);
+    public static List<Movie> initializeMovies(MovieAPI movieAPI) {
+        return movieAPI.getMoviesWithFiltersApplied("","","","");
     }
 
 

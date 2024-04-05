@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -44,9 +43,12 @@ public class HomeController implements Initializable {
 
     protected SortedState sortedState;
 
+    private MovieAPI movieAPI;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        allMovies = Movie.initializeMovies();
+        movieAPI = new MovieAPI();
+        allMovies = Movie.initializeMovies(movieAPI);
         observableMovies.addAll(allMovies);
         sortedState = SortedState.NONE;
 
@@ -91,11 +93,8 @@ public class HomeController implements Initializable {
 
     public void searchBtnClicked(ActionEvent actionEvent) {
         List<String> filters = filterCheck();
-        String url = MovieAPI.createUrlForMovieAPI(filters.get(0), filters.get(1), filters.get(2), filters.get(3));
-        String movieData = MovieAPI.okhttpGetRequestForMovieAPI(url);
-        List<Movie> movies = MovieAPI.jsonStringToMovieObjects(movieData);
         observableMovies.clear();
-        observableMovies.addAll(movies);
+        observableMovies.addAll(movieAPI.getMoviesWithFiltersApplied(filters.get(0), filters.get(1), filters.get(2), filters.get(3)));
         sortedState = SortedState.NONE;
     }
 
