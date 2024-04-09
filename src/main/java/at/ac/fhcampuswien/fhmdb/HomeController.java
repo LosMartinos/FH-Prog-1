@@ -52,19 +52,23 @@ public class HomeController implements Initializable {
         allMovies = Movie.initializeMovies(movieAPI);
         observableMovies.addAll(allMovies);
         sortedState = SortedState.NONE;
-
         movieListView.setItems(observableMovies);
         movieListView.setCellFactory(movieListView -> new MovieCell());
 
+        initializeFilters();
+    }
+
+    public void initializeFilters() {
         genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().add("All genres");
         genreComboBox.getItems().addAll(MovieAPI.movieGenres);
 
         releaseYearComboBox.setPromptText("Filter by Release Year");
-        List<String> releaseYears = new ArrayList<>();
+        Set<String> setOfReleaseYears = new HashSet<>();
         for(Movie movie : allMovies) {
-            releaseYears.add(String.valueOf(movie.getReleaseYear()));
+            setOfReleaseYears.add(String.valueOf(movie.getReleaseYear()));
         }
+        List<String> releaseYears = new ArrayList<>(setOfReleaseYears);
         Collections.sort(releaseYears);
         releaseYearComboBox.getItems().add("All years");
         releaseYearComboBox.getItems().addAll(releaseYears);
