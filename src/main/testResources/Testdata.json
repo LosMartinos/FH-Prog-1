@@ -1,0 +1,77 @@
+[
+  {
+    "id": "793CK",
+    "title": "Viking: Beginning of an Era",
+    "genres": [
+      "ACTION",
+      "ADVENTURE"
+    ],
+    "releaseYear": 793,
+    "description": "RAAAAA.",
+    "imgUrl": "https://i.kym-cdn.com/entries/icons/original/000/046/660/two_axes.jpg",
+    "lengthInMinutes": 15,
+    "directors": [
+      "Smörgåsbord"
+    ],
+    "writers": [
+      "Kallax Mustermann",
+      "Idanäs Musterfrau"
+    ],
+    "mainCast": [
+      "Viking Superstar",
+      "Viking 1",
+      "Viking 2"
+    ],
+    "rating": 10.0
+  },
+  {
+    "id": "Hum10Nuk20",
+    "title": "Humuhumunukunukuapua'a Moments",
+    "genres": [
+      "DOCUMENTARY",
+      "BIOGRAPHY"
+    ],
+    "releaseYear": 2024,
+    "description": "Warm saltwater Fish, really Fascinating.",
+    "imgUrl": "https://i.kym-cdn.com/entries/icons/original/000/046/660/two_axes.jpg",
+    "lengthInMinutes": 146,
+    "directors": [
+      "Jens Pollak"
+    ],
+    "writers": [
+      "Jens Pollak",
+      "Charly Gippytie"
+    ],
+    "mainCast": [
+      "Viking Superstar",
+      "Ryan Gosling",
+      "Christian Bale"
+    ],
+    "rating": 0.9
+  },
+  {
+    "id": "801CK",
+    "title": "Viking: The Vikinging",
+    "genres": [
+      "ACTION",
+      "ADVENTURE"
+    ],
+    "releaseYear": 801,
+    "description": ".",
+    "imgUrl": "https://i.kym-cdn.com/entries/icons/original/000/046/660/two_axes.jpg",
+    "lengthInMinutes": 300,
+    "directors": [
+      "Smörgåsbord"
+    ],
+    "writers": [
+      "Kallax Mustermann",
+      "Idanäs Musterfrau"
+    ],
+    "mainCast": [
+      "Viking Superstar",
+      "Viking Bride",
+      "Viking Citizen 100"
+    ],
+    "rating": 8.7
+  }
+]

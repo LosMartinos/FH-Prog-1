@@ -1,0 +1,26 @@
+{
+  "id": "72302391-e909-4337-ade8-65814288e677",
+  "title": "Goodfellas",
+  "genres": [
+    "BIOGRAPHY",
+    "CRIME",
+    "DRAMA"
+  ],
+  "releaseYear": 1990,
+  "description": "The story of Henry Hill and his life in the mob, covering his relationship with his wife Karen Hill and his mob partners Jimmy Conway and Tommy DeVito in the Italian-American crime syndicate.",
+  "imgUrl": "https://m.media-amazon.com/images/M/MV5BY2NkZjEzMDgtN2RjYy00YzM1LWI4ZmQtMjIwYjFjNmI3ZGEwXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_FMjpg_UX1000_.jpg",
+  "lengthInMinutes": 146,
+  "directors": [
+    "Martin Scorsese"
+  ],
+  "writers": [
+    "Nicholas Pileggi",
+    "Nicholas Pileggi"
+  ],
+  "mainCast": [
+    "Robert De Niro",
+    "Ray Liotta",
+    "Joe Pesci"
+  ],
+  "rating": 8.7
+}
