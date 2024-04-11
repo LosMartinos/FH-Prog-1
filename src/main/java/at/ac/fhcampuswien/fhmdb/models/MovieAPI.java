@@ -32,7 +32,7 @@ public class MovieAPI {
 
     public String createUrlForMovieAPI(String query, String genre, String released, String rating) {
         HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
-                .scheme("https")
+                .scheme("http")
                 .host("prog2.fh-campuswien.ac.at")
                 .addPathSegment("movies");
 

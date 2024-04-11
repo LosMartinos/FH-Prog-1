@@ -1,7 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.models.Movie;
-import at.ac.fhcampuswien.fhmdb.models.MovieAPI;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,92 +15,40 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class HomeControllerTest {
+	//Preparing Test Data
 	static List<Movie> testMovies = new ArrayList<>();
 
-	@BeforeAll
+	@BeforeAll //Fills testMovies list with Test Data once to prevent duplicate Test Data
 	static void setUpTestData() {
 		fillTestMoviesWithData();
 	}
 
-	static void fillTestMoviesWithData(){
+	static void fillTestMoviesWithData() {
 		try (FileReader reader = new FileReader("src/main/testResources/Testdata.json")) {
-			Type type = new TypeToken<ArrayList<Movie>>() {}.getType();
-			testMovies = new Gson().fromJson(reader, type);
-	} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/* TODO: Test to check API Retuns, idk if it's really nessecary tho lol
-	@Test
-	void doesAPIRequestReturnTheRightData(){
-		List<Movie> apiRequestTestData = new ArrayList<>();
-		List<Movie> apiRequestRealData = new ArrayList<>();
-		HomeController homeController = new HomeController();
-		MovieAPI movieAPI = new MovieAPI();
-		try (FileReader reader = new FileReader("src/main/testResources/APIReturnCheck.json")) {
-			Type type = new TypeToken<ArrayList<Movie>>() {}.getType();
+			Type type = new TypeToken<ArrayList<Movie>>() {
+			}.getType();
 			testMovies = new Gson().fromJson(reader, type);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
 
-		apiRequestRealData = Movie.initializeMovies(movieAPI);
-		assertAll("check if api request returns the right data",
-                () -> {
-					String methodResult = apiRequestRealData.get(0).getId();
-					assertEquals(methodResult, expectedActor, "Request returns wrong Data");
-				},
-				() -> {
-					String methodResult = homeController.getMostPopularActor(testMovies);
-					assertEquals(methodResult, expectedActor, "Request returns wrong Data");
-				},
-				() -> {
-					String methodResult = homeController.getMostPopularActor(testMovies);
-					assertEquals(methodResult, expectedActor, "Request returns wrong Data");
-				},
-				() -> {
-					String methodResult = homeController.getMostPopularActor(testMovies);
-					assertEquals(methodResult, expectedActor, "Request returns wrong Data");
-				},
-				() -> {
-					String methodResult = homeController.getMostPopularActor(testMovies);
-					assertEquals(methodResult, expectedActor, "Request returns wrong Data");
-				},
-				() -> {
-					String methodResult = homeController.getMostPopularActor(testMovies);
-					assertEquals(methodResult, expectedActor, "Request returns wrong Data");
-				},
-				() -> {
-					String methodResult = homeController.getMostPopularActor(testMovies);
-					assertEquals(methodResult, expectedActor, "Request returns wrong Data");
-				},
-				() -> {
-					String methodResult = homeController.getMostPopularActor(testMovies);
-					assertEquals(methodResult, expectedActor, "Request returns wrong Data");
-				},
-				() -> {
-					String methodResult = homeController.getMostPopularActor(testMovies);
-					assertEquals(methodResult, expectedActor, "Request returns wrong Data");
-				}
-
-		);
-	} */
+	//Tests
 
 	@Test
-	void getMostPopularActor(){
+	void getMostOftenOccurringActor() {
 		String expectedActor = "Viking Superstar";
 		HomeController homeController = new HomeController();
 		assertAll("most popular actor assertions",
-                () -> {
+				() -> {
 					String methodResult = homeController.getMostPopularActor(testMovies);
 					assertEquals(methodResult, expectedActor, "Getting the most popular Actor Failed");
 				}
 		);
-	};
+	}
 
 	@Test
-	void getLongestMovieTitle(){
+	void getLongestMovieTitleAsInteger(){
 		int expectedResult = "Humuhumunukunukuapua'a Moments".length();
 		HomeController homeController = new HomeController();
 		assertAll("longest movie title assertions",
@@ -110,10 +57,10 @@ class HomeControllerTest {
 					assertEquals(methodResult, expectedResult, "Getting the longest Movie title Failed");
 				}
 		);
-	};
+	}
 
 	@Test
-	void countMoviesFrom(){
+	void countMoviesFromADirector(){
 		int expectedResult1 = 1;
 		int expectedResult2 = 2;
 		String director1 = "Jens Pollak";
@@ -129,10 +76,10 @@ class HomeControllerTest {
 					assertEquals(methodResult, expectedResult2, "Counting Movies of" + director2 + " Failed");
 				}
 		);
-	};
+	}
 
 	@Test
-	void getMoviesBetweenYears(){
+	void getAllMoviesBetweenYears(){
 		String expectedResult1 = "Viking: Beginning of an Era";
 		String expectedResult2 = "Viking: The Vikinging";
 		HomeController homeController = new HomeController();
@@ -146,8 +93,10 @@ class HomeControllerTest {
 					assertEquals(methodResult.get(1).getTitle(), expectedResult2, "Getting movie 2 between years Failed");
 				}
 		);
-	};
-    /* TODO: Adapt old tests to function in ex2;
+	}
+
+	/*
+
     @Test
     void sortingMovieListAlphabetically() {
         List<Movie> movies = Movie.initializeMovies();
@@ -243,5 +192,6 @@ class HomeControllerTest {
                     homeController.filterObservableMovies(movieGenre3, movieName3);
                     assertTrue(homeController.getObservableMovies().isEmpty());
                 });
-    }*/
+    }
+	 */
 }
