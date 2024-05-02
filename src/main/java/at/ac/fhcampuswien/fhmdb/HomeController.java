@@ -1,6 +1,8 @@
 package at.ac.fhcampuswien.fhmdb;
 
-import at.ac.fhcampuswien.fhmdb.models.*;
+import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.models.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.models.SortedState;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -65,7 +67,7 @@ public class HomeController implements Initializable {
 
         releaseYearComboBox.setPromptText("Filter by Release Year");
         Set<String> setOfReleaseYears = new HashSet<>();
-        for(Movie movie : allMovies) {
+        for (Movie movie : allMovies) {
             setOfReleaseYears.add(String.valueOf(movie.getReleaseYear()));
         }
         List<String> releaseYears = new ArrayList<>(setOfReleaseYears);
@@ -132,7 +134,7 @@ public class HomeController implements Initializable {
     }
 
     public int countMoviesFrom(List<Movie> movies, String director) { // normalerweise ein long weil im stream große zahlen sein können
-        return (int)movies.stream()
+        return (int) movies.stream()
                 .filter(movie -> movie.getDirectors().contains(director)) // get directors
                 .count();
     }
@@ -143,7 +145,6 @@ public class HomeController implements Initializable {
                 .collect(Collectors.toList()); // Collectors.tolist macht eine liste aus den movies
     }
 
-    //wtf man
     public String getMostPopularActor(List<Movie> movies) {
         Map<String, Long> actorCounts = movies.stream()  // chatgpt gönnt
                 .flatMap(movie -> movie.getMainCast().stream()) // flat map is map für listen/arrays/gruppen

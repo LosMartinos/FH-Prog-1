@@ -17,11 +17,20 @@ public class Movie {
 
     public Movie() {}
 
+    public Movie(String id, String title, String description, List<String> genres, int releaseYear, String imgUrl, int lengthInMinutes, double rating) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.genres = genres;
+        this.releaseYear = releaseYear;
+        this.imgUrl = imgUrl;
+        this.lengthInMinutes = lengthInMinutes;
+        this.rating = rating;
+    }
 
     public static List<Movie> initializeMovies(MovieAPI movieAPI) {
         return movieAPI.getMoviesWithFiltersApplied("","","","");
     }
-
 
     // Getters
     public String getId() {

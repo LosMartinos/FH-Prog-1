@@ -2,20 +2,47 @@ package at.ac.fhcampuswien.fhmdb.ui;
 
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-
-import java.util.stream.Collectors;
+import javafx.scene.text.Font;
+import javafx.scene.control.Button;
 
 public class MovieCell extends ListCell<Movie> {
     private final Label title = new Label();
     private final Label detail = new Label();
     private final Label genres = new Label();
-    private final VBox layout = new VBox(title, detail, genres);
+
+    private final Button detailsButton = new Button("Show Details");
+    private final Button watchlistButton = new Button("Watchlist");
+
+    private final VBox movieDataLayout = new VBox(title, detail, genres);
+    private final HBox buttonsLayout = new HBox(detailsButton, watchlistButton);
+
+    public MovieCell() {
+        movieDataLayout.setSpacing(10);
+        movieDataLayout.setAlignment(Pos.CENTER_LEFT);
+
+        buttonsLayout.setSpacing(10);
+        buttonsLayout.setAlignment(Pos.CENTER_RIGHT);
+        HBox.setHgrow(buttonsLayout, Priority.ALWAYS);
+
+        detailsButton.getStyleClass().add("background-yellow");
+        watchlistButton.getStyleClass().add("background-yellow");
+
+        title.getStyleClass().add("text-yellow");
+        title.setFont(new Font(20));
+
+        detail.getStyleClass().add("text-white");
+        detail.setWrapText(true);
+        detail.setMinWidth(400);
+        detail.maxWidthProperty().bind(buttonsLayout.widthProperty().multiply(0.85));
+
+        genres.getStyleClass().add("text-white");
+    }
 
     @Override
     protected void updateItem(Movie movie, boolean empty) {
@@ -34,20 +61,10 @@ public class MovieCell extends ListCell<Movie> {
             );
             genres.setText(String.join(", ", movie.getGenres()));
 
-            // color scheme
-            title.getStyleClass().add("text-yellow");
-            detail.getStyleClass().add("text-white");
-            genres.getStyleClass().add("text-white");
-            layout.setBackground(new Background(new BackgroundFill(Color.web("#454545"), null, null)));
-
-            // layout
-            title.fontProperty().set(title.getFont().font(20));
-            detail.setMaxWidth(this.getScene().getWidth() - 30);
-            detail.setWrapText(true);
-            layout.setPadding(new Insets(10));
-            layout.spacingProperty().set(10);
-            layout.alignmentProperty().set(javafx.geometry.Pos.CENTER_LEFT);
-            setGraphic(layout);
+            HBox cellLayout = new HBox(movieDataLayout, buttonsLayout);
+            cellLayout.setBackground(new Background(new BackgroundFill(Color.web("#454545"), null, null)));
+            cellLayout.setPadding(new Insets(10));
+            setGraphic(cellLayout);
         }
     }
 }
