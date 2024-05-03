@@ -1,61 +1,61 @@
-package at.ac.fhcampuswien.fhmdb;
+package at.ac.fhcampuswien.fhmdb.controllers;
 
+import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
+import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
+import at.ac.fhcampuswien.fhmdb.ui.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
-import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class HomeController implements Initializable {
+public class HomeViewController {
+
+    // Filters
     @FXML
-    public JFXButton searchBtn;
+    public ComboBox<String> genreComboBox;
+
+    @FXML
+    public ComboBox<String> ratingComboBox;
+
+    @FXML
+    public ComboBox<String> releaseYearComboBox;
+
+    @FXML
+    public Button searchBtn;
 
     @FXML
     public TextField searchField;
 
     @FXML
-    public JFXListView movieListView;
+    public Button sortBtn;
 
+    // Movie list and API
     @FXML
-    public JFXComboBox genreComboBox;
+    public JFXListView<Movie> movieListView;
 
-    @FXML
-    public JFXComboBox releaseYearComboBox;
-
-    @FXML
-    public JFXComboBox ratingComboBox;
-
-    @FXML
-    public JFXButton sortBtn;
-
-    public List<Movie> allMovies;
-
-    protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
-
-    protected SortedState sortedState;
-
+    private List<Movie> allMovies;
+    private SortedState sortedState;
+    private ObservableList<Movie> movieList = FXCollections.observableArrayList();
     private MovieAPI movieAPI;
+    private final ClickEventHandler onAddToWatchlistClicked = (clickedItem) -> new WatchlistRepository().addToWatchlist(new WatchlistMovieEntity(((Movie) clickedItem).getId()));
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize() {
         movieAPI = new MovieAPI();
         allMovies = Movie.initializeMovies(movieAPI);
-        observableMovies.addAll(allMovies);
+        movieList.addAll(allMovies);
         sortedState = SortedState.NONE;
-        movieListView.setItems(observableMovies);
-        movieListView.setCellFactory(movieListView -> new MovieCell());
+        movieListView.setItems(movieList);
+        movieListView.setCellFactory(movieListView -> new MovieCell(onAddToWatchlistClicked));
 
         initializeFilters();
     }
@@ -90,19 +90,12 @@ public class HomeController implements Initializable {
 
     public void sortMovies(SortedState sortDirection) {
         if (sortDirection == SortedState.ASCENDING) {
-            observableMovies.sort(Comparator.comparing(Movie::getTitle));
+            movieList.sort(Comparator.comparing(Movie::getTitle));
             sortedState = SortedState.ASCENDING;
         } else {
-            observableMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
+            movieList.sort(Comparator.comparing(Movie::getTitle).reversed());
             sortedState = SortedState.DESCENDING;
         }
-    }
-
-    public void searchBtnClicked(ActionEvent actionEvent) {
-        List<String> filters = filterCheck();
-        observableMovies.clear();
-        observableMovies.addAll(movieAPI.getMoviesWithFiltersApplied(filters.get(0), filters.get(1), filters.get(2), filters.get(3)));
-        sortedState = SortedState.NONE;
     }
 
     private List<String> filterCheck() {
@@ -122,10 +115,20 @@ public class HomeController implements Initializable {
         return filters;
     }
 
-    public void sortBtnClicked(ActionEvent actionEvent) {
+    @FXML
+    public void searchBtnClicked(ActionEvent event) {
+        List<String> filters = filterCheck();
+        movieList.clear();
+        movieList.addAll(movieAPI.getMoviesWithFiltersApplied(filters.get(0), filters.get(1), filters.get(2), filters.get(3)));
+        sortedState = SortedState.NONE;
+    }
+
+    @FXML
+    public void sortBtnClicked(ActionEvent event) {
         sortMovies();
     }
 
+    /*
     public int getLongestMovieTitle(List<Movie> movies) {
         return movies.stream() //umwandlung zu eeinem stream
                 .mapToInt(movie -> movie.getTitle().length()) // mapping zu int
@@ -155,5 +158,5 @@ public class HomeController implements Initializable {
                 .map(Map.Entry::getKey)
                 .orElse(null);
     }
+    */
 }
-

@@ -12,11 +12,11 @@ public class WatchlistRepository {
         this.dao = Database.getDatabase().getWatchlistDao();
     }
 
-    List<WatchlistMovieEntity> getWatchlist() throws SQLException {
+    public List<WatchlistMovieEntity> getWatchlist() throws SQLException {
         return dao.queryForAll();
     }
 
-    int addToWatchlist(WatchlistMovieEntity movie) {
+    public int addToWatchlist(WatchlistMovieEntity movie) {
         try {
             dao.create(movie);
         } catch (SQLException e) {
@@ -24,7 +24,7 @@ public class WatchlistRepository {
         } return 0;
     }
 
-    int removeFromWatchlist(String apiID) {
+    public int removeFromWatchlist(String apiID) {
         try {
             dao.delete(dao.queryForEq("apiID", apiID));
         } catch (SQLException e) {

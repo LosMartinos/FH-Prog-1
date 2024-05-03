@@ -17,12 +17,18 @@ public class MovieCell extends ListCell<Movie> {
     private final Label genres = new Label();
 
     private final Button detailsButton = new Button("Show Details");
-    private final Button watchlistButton = new Button("Watchlist");
+    protected final Button watchlistButton = new Button();
 
     private final VBox movieDataLayout = new VBox(title, detail, genres);
     private final HBox buttonsLayout = new HBox(detailsButton, watchlistButton);
 
-    public MovieCell() {
+    public MovieCell(ClickEventHandler<Movie> addToWatchlistClicked) {
+        super();
+
+        watchlistButton.setOnMouseClicked(mouseEvent -> {
+            addToWatchlistClicked.onClick(getItem());
+        });
+
         movieDataLayout.setSpacing(10);
         movieDataLayout.setAlignment(Pos.CENTER_LEFT);
 
@@ -37,9 +43,9 @@ public class MovieCell extends ListCell<Movie> {
         title.setFont(new Font(20));
 
         detail.getStyleClass().add("text-white");
+        detail.setMaxWidth(500);
         detail.setWrapText(true);
-        detail.setMinWidth(400);
-        detail.maxWidthProperty().bind(buttonsLayout.widthProperty().multiply(0.85));
+
 
         genres.getStyleClass().add("text-white");
     }
