@@ -12,8 +12,12 @@ public class WatchlistRepository {
         this.dao = Database.getDatabase().getWatchlistDao();
     }
 
-    public List<WatchlistMovieEntity> getWatchlist() throws SQLException {
-        return dao.queryForAll();
+    public List<WatchlistMovieEntity> getWatchlist() {
+        try {
+            return dao.queryForAll();
+        } catch (SQLException e) {
+            System.out.println("get watchlist failed");
+        } return null;
     }
 
     public int addToWatchlist(WatchlistMovieEntity movie) {

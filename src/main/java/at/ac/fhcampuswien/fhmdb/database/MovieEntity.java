@@ -78,4 +78,8 @@ public class MovieEntity {
         }
         return movies;
     }
+
+    public String getApiID() {
+        return apiID;
+    }
 }

@@ -9,4 +9,6 @@ public class WatchlistMovieEntity extends MovieEntity {
     }
 
     public WatchlistMovieEntity() {}
+
+
 }

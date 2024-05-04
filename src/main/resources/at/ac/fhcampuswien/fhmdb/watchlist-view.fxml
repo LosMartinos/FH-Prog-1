@@ -6,8 +6,8 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="at.ac.fhcampuswien.fhmdb.controllers.WatchlistViewController"
-            prefHeight="400.0" prefWidth="600.0">
+            fx:controller="at.ac.fhcampuswien.fhmdb.controllers.WatchlistViewController">
 
-    <JFXListView fx:id="watchlistView" prefWidth="820" VBox.vgrow="ALWAYS" />
+    <JFXListView fx:id="watchlistView" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                 AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" />
 </AnchorPane>

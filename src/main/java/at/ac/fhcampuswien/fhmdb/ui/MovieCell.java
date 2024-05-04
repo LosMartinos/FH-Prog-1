@@ -22,12 +22,14 @@ public class MovieCell extends ListCell<Movie> {
     private final VBox movieDataLayout = new VBox(title, detail, genres);
     private final HBox buttonsLayout = new HBox(detailsButton, watchlistButton);
 
-    public MovieCell(ClickEventHandler<Movie> addToWatchlistClicked) {
+    public MovieCell(ClickEventHandler<Movie> addToWatchlistClicked, String watchlistBtnText) {
         super();
 
         watchlistButton.setOnMouseClicked(mouseEvent -> {
             addToWatchlistClicked.onClick(getItem());
         });
+
+        watchlistButton.setText(watchlistBtnText);
 
         movieDataLayout.setSpacing(10);
         movieDataLayout.setAlignment(Pos.CENTER_LEFT);

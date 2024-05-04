@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.controllers;
 
+import at.ac.fhcampuswien.fhmdb.database.MovieRepository;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
@@ -47,15 +48,19 @@ public class HomeViewController {
     private SortedState sortedState;
     private ObservableList<Movie> movieList = FXCollections.observableArrayList();
     private MovieAPI movieAPI;
-    private final ClickEventHandler onAddToWatchlistClicked = (clickedItem) -> new WatchlistRepository().addToWatchlist(new WatchlistMovieEntity(((Movie) clickedItem).getId()));
+    private MovieRepository mr;
+    private final ClickEventHandler<Movie> onAddToWatchlistClicked = (clickedItem) -> new WatchlistRepository().addToWatchlist(new WatchlistMovieEntity(clickedItem.getId()));
 
     public void initialize() {
+        this.mr = new MovieRepository();
         movieAPI = new MovieAPI();
         allMovies = Movie.initializeMovies(movieAPI);
+        mr.removeAll();
         movieList.addAll(allMovies);
+        mr.addAllMovies(allMovies);
         sortedState = SortedState.NONE;
         movieListView.setItems(movieList);
-        movieListView.setCellFactory(movieListView -> new MovieCell(onAddToWatchlistClicked));
+        movieListView.setCellFactory(movieListView -> new MovieCell(onAddToWatchlistClicked, "Watchlist"));
 
         initializeFilters();
     }

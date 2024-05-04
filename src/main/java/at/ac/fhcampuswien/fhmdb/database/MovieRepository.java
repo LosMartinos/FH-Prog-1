@@ -29,6 +29,14 @@ public class MovieRepository {
         return dao.queryForId(id);
     }
 
+    public Movie getMovieByApiId(String id) {
+        try {
+            return MovieEntity.toMovies(dao.queryForEq("apiID", id)).get(0);
+        } catch (SQLException e) {
+            System.out.println("couldn't get movie by api id");
+        } return null;
+    }
+
     public int addAllMovies(List<Movie> movies) {
         try {
             dao.create(MovieEntity.fromMovies(movies));
