@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -12,14 +13,14 @@ public class Database {
 
     public static final String DB_URL = "jdbc:h2:file: ./db/moviedb";
     public static final String DB_USERNAME = "user";
-    public static final String DB_PASSWORD = "password";
+    public static final String DB_PASSWORD = "passwords";
 
     private static ConnectionSource connectionSource;
     private static Database instance;
     private Dao<MovieEntity, Long> movieDao;
     private Dao<WatchlistMovieEntity, Long> watchlistDao;
 
-    private Database() {
+    private Database() throws DatabaseException {
         try {
             createConnectionSource();
             movieDao = DaoManager.createDao(connectionSource, MovieEntity.class);
@@ -28,6 +29,7 @@ public class Database {
             createTable(MovieEntity.class);
         } catch (SQLException e) {
             System.out.println("Failed to create Database");
+            throw new DatabaseException(e.getMessage());
         }
     }
 
@@ -39,7 +41,7 @@ public class Database {
         TableUtils.createTableIfNotExists(connectionSource, entityClass);
     }
 
-    public static Database getDatabase() {
+    public static Database getDatabase() throws DatabaseException {
         if (instance == null) {
             instance = new Database();
         }

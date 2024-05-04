@@ -1,8 +1,11 @@
 package at.ac.fhcampuswien.fhmdb.controllers;
 
+import at.ac.fhcampuswien.fhmdb.database.MovieEntity;
 import at.ac.fhcampuswien.fhmdb.database.MovieRepository;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.exceptions.MovieAPIException;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
@@ -13,10 +16,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class HomeViewController {
@@ -49,15 +54,57 @@ public class HomeViewController {
     private ObservableList<Movie> movieList = FXCollections.observableArrayList();
     private MovieAPI movieAPI;
     private MovieRepository mr;
-    private final ClickEventHandler<Movie> onAddToWatchlistClicked = (clickedItem) -> new WatchlistRepository().addToWatchlist(new WatchlistMovieEntity(clickedItem.getId()));
+    private ClickEventHandler<Movie> onAddToWatchlistClicked = null;
+    private WatchlistRepository wlp;
 
     public void initialize() {
-        this.mr = new MovieRepository();
+        try
+        {
+            wlp = new WatchlistRepository();
+        }
+        catch (DatabaseException e){
+            alertException(e.getMessage());
+        }
+
+        onAddToWatchlistClicked = (clickedItem) -> wlp.addToWatchlist(new WatchlistMovieEntity(clickedItem.getId()));
         movieAPI = new MovieAPI();
-        allMovies = Movie.initializeMovies(movieAPI);
-        mr.removeAll();
-        movieList.addAll(allMovies);
-        mr.addAllMovies(allMovies);
+        try
+        {
+            this.mr = new MovieRepository();
+
+        }
+        catch (DatabaseException e)
+        {
+            alertException(e.getMessage());
+
+        }
+        try
+        {
+            allMovies = Movie.initializeMovies(movieAPI);
+            try
+            {
+                mr.removeAll();
+                mr.addAllMovies(allMovies);
+            }catch (DatabaseException | NullPointerException e)
+            {
+                alertException(e.getMessage());
+            }
+        }
+        catch (MovieAPIException e){
+            alertException(e.getMessage());
+            try{
+                allMovies = MovieEntity.toMovies(mr.getAllMovies());
+            }
+            catch (DatabaseException | NullPointerException en){
+                alertException(en.getMessage());
+            }
+        }
+
+        try{
+            movieList.addAll(allMovies);
+        }catch (NullPointerException e){
+            alertException(e.getMessage());
+        }
         sortedState = SortedState.NONE;
         movieListView.setItems(movieList);
         movieListView.setCellFactory(movieListView -> new MovieCell(onAddToWatchlistClicked, "Watchlist"));
@@ -72,13 +119,18 @@ public class HomeViewController {
 
         releaseYearComboBox.setPromptText("Filter by Release Year");
         Set<String> setOfReleaseYears = new HashSet<>();
-        for (Movie movie : allMovies) {
-            setOfReleaseYears.add(String.valueOf(movie.getReleaseYear()));
+        try{
+            for (Movie movie : allMovies) {
+                setOfReleaseYears.add(String.valueOf(movie.getReleaseYear()));
+            }
+            List<String> releaseYears = new ArrayList<>(setOfReleaseYears);
+            Collections.sort(releaseYears);
+            releaseYearComboBox.getItems().addAll(releaseYears);
+        }catch (NullPointerException e){
+            alertException(e.getMessage());
+        }finally{
+            releaseYearComboBox.getItems().add("All years");
         }
-        List<String> releaseYears = new ArrayList<>(setOfReleaseYears);
-        Collections.sort(releaseYears);
-        releaseYearComboBox.getItems().add("All years");
-        releaseYearComboBox.getItems().addAll(releaseYears);
 
         ratingComboBox.setPromptText("Filter by Rating");
         ratingComboBox.getItems().add("All ratings");
@@ -121,10 +173,20 @@ public class HomeViewController {
     }
 
     @FXML
-    public void searchBtnClicked(ActionEvent event) {
+    public void searchBtnClicked(ActionEvent event) throws MovieAPIException {
         List<String> filters = filterCheck();
         movieList.clear();
-        movieList.addAll(movieAPI.getMoviesWithFiltersApplied(filters.get(0), filters.get(1), filters.get(2), filters.get(3)));
+        try {
+            movieList.addAll(movieAPI.getMoviesWithFiltersApplied(filters.get(0), filters.get(1), filters.get(2), filters.get(3)));
+        }catch (MovieAPIException e){
+            alertException(e.getMessage());
+            try{
+                movieList.addAll(MovieEntity.toMovies(mr.getAllMovies()));
+            }
+            catch(DatabaseException | NullPointerException en){
+                alertException(en.getMessage());
+            }
+        }
         sortedState = SortedState.NONE;
     }
 
@@ -164,4 +226,9 @@ public class HomeViewController {
                 .orElse(null);
     }
     */
+    public void alertException(String msg){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
 }

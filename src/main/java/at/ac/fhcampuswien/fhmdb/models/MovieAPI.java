@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
+import at.ac.fhcampuswien.fhmdb.exceptions.MovieAPIException;
 import com.google.gson.reflect.TypeToken;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -24,8 +25,8 @@ public class MovieAPI {
         this.client = new OkHttpClient();
     }
 
-    public List<Movie> getMoviesWithFiltersApplied(String query, String genre, String released, String rating) {
-        String url =createUrlForMovieAPI(query, genre, released, rating);
+    public List<Movie> getMoviesWithFiltersApplied(String query, String genre, String released, String rating) throws MovieAPIException {
+        String url = createUrlForMovieAPI(query, genre, released, rating);
         String movieData = okhttpGetRequestForMovieAPI(url);
         return jsonStringToMovieObjects(movieData);
     }
@@ -33,7 +34,7 @@ public class MovieAPI {
     public String createUrlForMovieAPI(String query, String genre, String released, String rating) {
         HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
                 .scheme("http")
-                .host("prog2.fh-campuswien.ac.at")
+                .host("prog2.fh-campuswien.ac.ata")
                 .addPathSegment("movies");
 
         if (query != null) urlBuilder.addQueryParameter("query", query);
@@ -44,7 +45,7 @@ public class MovieAPI {
         return urlBuilder.build().toString();
     }
 
-    public String okhttpGetRequestForMovieAPI(String url) {
+    public String okhttpGetRequestForMovieAPI(String url) throws MovieAPIException {
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("User-Agent", "FHMDb Client")
@@ -53,7 +54,7 @@ public class MovieAPI {
         try {
             return client.newCall(request).execute().body().string();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new MovieAPIException(e.getMessage());
         }
     }
 
