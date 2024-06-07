@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.controllers;
 
 import at.ac.fhcampuswien.fhmdb.ClickEventHandler;
+import at.ac.fhcampuswien.fhmdb.Observer;
 import at.ac.fhcampuswien.fhmdb.database.*;
 import at.ac.fhcampuswien.fhmdb.ui.UserDialog;
 import at.ac.fhcampuswien.fhmdb.ui.WatchlistCell;
@@ -9,13 +10,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class WatchlistController implements Initializable {
+public class WatchlistController implements Initializable, Observer {
 
     @FXML
     public JFXListView watchlistView;
@@ -68,6 +70,20 @@ public class WatchlistController implements Initializable {
             watchlistView.setPlaceholder(new javafx.scene.control.Label("Watchlist is empty"));
         }
 
+        try {
+            WatchlistRepository.getInstance().addObserver(this, "removeFromWatchlist");
+        } catch (DataBaseException e) {
+            UserDialog dialog = new UserDialog("Database Error", "Could not start observing watchlist");
+            dialog.show();
+        }
+
         System.out.println("WatchlistController initialized");
+    }
+
+    @Override
+    public void update(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

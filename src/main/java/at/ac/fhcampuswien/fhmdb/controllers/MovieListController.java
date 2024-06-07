@@ -88,7 +88,7 @@ public class MovieListController implements Initializable, Observer {
         }
 
         try {
-            WatchlistRepository.getInstance().addObserver(this);
+            WatchlistRepository.getInstance().addObserver(this, "addToWatchlist");
         } catch (DataBaseException e) {
             UserDialog dialog = new UserDialog("Database Error", "Could not start observing watchlist");
             dialog.show();
