@@ -22,13 +22,10 @@ public class MovieCell extends ListCell<Movie> {
     private final VBox layout = new VBox(header, detail, genre);
     private boolean collapsedDetails = true;
 
-    // movieID = 1;
-
     public MovieCell(ClickEventHandler<Movie> addToWatchlistClicked) {
         super();
         // color scheme
         detailBtn.setStyle("-fx-background-color: #f5c518;");
-        // set margin of detailBtn
         HBox.setMargin(detailBtn, new Insets(0, 10, 0, 10));
         watchlistBtn.setStyle("-fx-background-color: #f5c518;");
         title.getStyleClass().add("text-yellow");
@@ -40,7 +37,6 @@ public class MovieCell extends ListCell<Movie> {
         header.setHgrow(title, Priority.ALWAYS);
         header.setHgrow(detailBtn, Priority.ALWAYS);
         title.setMaxWidth(Double.MAX_VALUE);
-        //detailBtn.setMaxWidth(Double.MAX_VALUE);
 
         // layout
         title.fontProperty().set(title.getFont().font(20));
@@ -62,6 +58,16 @@ public class MovieCell extends ListCell<Movie> {
 
         watchlistBtn.setOnMouseClicked(mouseEvent -> {
             addToWatchlistClicked.onClick(getItem());
+        });
+
+        // Listener to update detail width when scene is available
+        sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+                    detail.setMaxWidth(newWidth.doubleValue() - 30);
+                });
+                detail.setMaxWidth(newScene.getWidth() - 30); // Initial set if scene already present
+            }
         });
     }
 
@@ -90,6 +96,7 @@ public class MovieCell extends ListCell<Movie> {
         details.getChildren().add(mainCast);
         return details;
     }
+
     @Override
     protected void updateItem(Movie movie, boolean empty) {
         super.updateItem(movie, empty);
@@ -112,10 +119,11 @@ public class MovieCell extends ListCell<Movie> {
                     .collect(Collectors.joining(", "));
             genre.setText(genres);
 
-            detail.setMaxWidth(this.getScene().getWidth() - 30);
+            if (this.getScene() != null) {
+                detail.setMaxWidth(this.getScene().getWidth() - 30);
+            }
 
             setGraphic(layout);
         }
     }
 }
-

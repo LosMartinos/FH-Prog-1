@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.controllers;
 
+import at.ac.fhcampuswien.fhmdb.MyFactory;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.enums.UIComponent;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
@@ -68,7 +69,9 @@ public class MainController {
     }
 
     public void setContent(String fxmlPath){
+        MyFactory myFactory = new MyFactory();
         FXMLLoader loader = new FXMLLoader(MainController.class.getResource(fxmlPath));
+        loader.setControllerFactory(myFactory);
 
         try {
             mainPane.setCenter(loader.load());

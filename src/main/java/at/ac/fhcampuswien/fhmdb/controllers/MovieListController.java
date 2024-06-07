@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.controllers;
 
 import at.ac.fhcampuswien.fhmdb.ClickEventHandler;
+import at.ac.fhcampuswien.fhmdb.MovielistState;
 import at.ac.fhcampuswien.fhmdb.Observer;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.api.MovieApiException;
@@ -52,8 +53,7 @@ public class MovieListController implements Initializable, Observer {
     public List<Movie> allMovies;
 
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
-
-    protected SortedState sortedState;
+    private MovielistState movielistState;
 
     private final ClickEventHandler onAddToWatchlistClicked = (clickedItem) -> {
         if (clickedItem instanceof Movie movie) {
@@ -69,6 +69,10 @@ public class MovieListController implements Initializable, Observer {
             }
         }
     };
+
+    public static MovieListController instance;
+
+    private MovieListController() {};
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -96,7 +100,8 @@ public class MovieListController implements Initializable, Observer {
 
         setMovies(result);
         setMovieList(result);
-        sortedState = SortedState.NONE;
+
+        movielistState = new MovielistState();
 
     }
 
@@ -164,25 +169,6 @@ public class MovieListController implements Initializable, Observer {
         observableMovies.clear();
         observableMovies.addAll(movies);
     }
-    public void sortMovies(){
-        if (sortedState == SortedState.NONE || sortedState == SortedState.DESCENDING) {
-            sortMovies(SortedState.ASCENDING);
-        } else if (sortedState == SortedState.ASCENDING) {
-            sortMovies(SortedState.DESCENDING);
-        }
-    }
-    // sort movies based on sortedState
-    // by default sorted state is NONE
-    // afterward it switches between ascending and descending
-    public void sortMovies(SortedState sortDirection) {
-        if (sortDirection == SortedState.ASCENDING) {
-            observableMovies.sort(Comparator.comparing(Movie::getTitle));
-            sortedState = SortedState.ASCENDING;
-        } else {
-            observableMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
-            sortedState = SortedState.DESCENDING;
-        }
-    }
 
     public List<Movie> filterByQuery(List<Movie> movies, String query){
         if(query == null || query.isEmpty()) return movies;
@@ -239,9 +225,7 @@ public class MovieListController implements Initializable, Observer {
         setMovieList(movies);
         // applyAllFilters(searchQuery, genre);
 
-        if(sortedState != SortedState.NONE) {
-            sortMovies(sortedState);
-        }
+        observableMovies = movielistState.sortMoviesIfNotNone(observableMovies);
     }
 
     public String validateComboboxValue(Object value) {
@@ -263,7 +247,7 @@ public class MovieListController implements Initializable, Observer {
     }
 
     public void sortBtnClicked(ActionEvent actionEvent) {
-        sortMovies();
+        observableMovies = movielistState.sortMovies(observableMovies);
     }
 
     @Override
@@ -271,5 +255,11 @@ public class MovieListController implements Initializable, Observer {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public static MovieListController getInstance() {
+        if (instance == null) {
+            instance = new MovieListController();
+        } return instance;
     }
 }
